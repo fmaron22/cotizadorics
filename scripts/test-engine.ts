@@ -39,7 +39,7 @@ const input: QuoteInput = {
     chipId: 'c1', // Contactless -> Should trigger Inlay
     featuresSeguridadIds: ['s1'], // OVI -> Should trigger Serigrafía
     diasFabricacion: 30,
-    diasPagoCliente: 64,
+    diasCreditoCliente: 64,
     margenDeseado: 0.35
 };
 
