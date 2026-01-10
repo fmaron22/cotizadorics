@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// 1. Arquitectura de Base de Datos (Relacional)
+
+model MaterialBase {
+  id              String   @id @default(uuid())
+  tipo            String // Policarbonato, PVC, PETix, Compuesto
+  espesorMicras   Int
+  costoUnitarioUsd Float
+  proveedor       String?
+  customVariables Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Chip {
+  id                  String   @id @default(uuid())
+  modelo              String
+  interfaz            String // Contacto, Contactless, Dual
+  costoUnitario       Float
+  diasCreditoProveedor Int     @default(30)
+  leadTime            Int?
+  customVariables     Json?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+model Seguridad {
+  id                 String   @id @default(uuid())
+  nombre             String // Holograma, OVI, UV, Microtexto
+  insumoRequerido    String?
+  procesoVinculadoId String? // ID del proceso vinculado si aplica
+  customVariables    Json?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model ProcesoFab {
+  id                        String   @id @default(uuid())
+  nombreEtapa               String // Preprensa, Offset, Serigrafía, Laminación, Troquelado, Chip Encoding, QC
+  costoHoraOperador         Float
+  costoEnergia              Float
+  factorDesgasteMaquinaPorUnidad Float
+  customVariables           Json?
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @updatedAt
+}
+
+model Receta {
+  id               String   @id @default(uuid())
+  nombre           String // Ej. "Estructura Compuesta Std"
+  listaDeCapasJson String // JSON stringified list of layers
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Historial {
+  id              String   @id @default(uuid())
+  cliente         String
+  fecha           DateTime @default(now())
+  version         Int      @default(1)
+  inputsJson      String // JSON storing user selections
+  costoFinal      Float
+  precioVenta     Float
+  margenTeorico   Float
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
